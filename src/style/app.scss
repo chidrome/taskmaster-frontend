@@ -1,0 +1,64 @@
+header {
+  background:  #37475A;
+  color: ivory;
+  line-height: 2em;
+  font-size: 1.5em;
+}
+
+main {
+  margin: 1.5em 1em;
+  min-height: calc(100vh - 140px);
+
+  ul {
+      list-style-type: none;
+      max-width: 1200px;
+
+      li {
+          background: #eee;
+          line-height: 1.6em;
+          margin: .5em;
+          padding: .5em;
+      }
+    }
+  }
+
+img {
+  width: 200px;
+  height: 200px;
+}
+
+.push {
+  margin-left: auto;
+  padding: 0px, 30px;
+}
+
+.userdata {
+  font-size: 15px;
+  font-weight: 800;
+  color: blue;
+}
+
+button {
+  margin: 0px, 30px;
+
+}
+
+.status-available {
+    background-color:rgb(86, 86, 245);
+    color: white;
+
+}
+.status-assigned {
+    background-color:rgb(236, 204, 144);
+    color: black;
+
+}
+.status-accepted {
+    background-color:#80ff80;
+    color: black;
+
+}
+.status-completed {
+    background-color:grey;
+    color: white;
+}

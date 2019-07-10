@@ -1,10 +1,48 @@
 import React, {useState, useEffect} from 'react'
-// import Upload from './upload'
+import '../style/app.scss';
 
 const API = 'http://taskmaster-env.p2inzhbxb8.us-east-1.elasticbeanstalk.com/tasks'
 
 function Tasks() {
-  const [tasks, setTasks] = useState([])
+
+  // helper function
+  const _toggleStatus = (e) => {
+    e.preventDefault();
+    let id = e.target.id;
+
+    fetch( `${API}/${id}/state`, {
+      mode:'cors',
+      method: 'PUT'
+    
+    })
+    .then(data => data.json())
+    .then(task => {
+      setTasks( Tasks.map( (entry) => {
+          return entry.id === id ? task : entry;
+        }
+      ));
+    })
+    .catch( console.error );
+  };
+
+  function Description(props) {
+    let description = props.task.description || [];
+    let image = props.task.pic || [];
+    let assignee = props.task.assignee || [];
+    return (
+      <section>
+        Assignee Name: <span className="userdata">{assignee}</span>
+        <br></br>
+        Description: <span className="userdata">{description}</span>
+        <br></br>
+        Uploaded Image: <br></br>
+        <img src={image} alt={image} />
+      </section>
+    )
+  }
+
+
+  const [Tasks, setTasks] = useState([])
 
   const getTasks = () => {
     fetch(API, {mode:'cors'})
@@ -17,26 +55,22 @@ function Tasks() {
   return (
 
     <div>
-      <ul>
-        <li>
-      <section className="section-spans">
-        <span className="header-span">Title</span>
-        <span className="header-span">Description</span>
-        <span className="header-span">Assignee</span>
-        <span className="header-span">Status</span>
-         <span className="header-span">Upload image</span>
-      </section>
-      </li>
-      </ul>
     <ul>
-        {tasks.map((task) => 
+        {Tasks.map((task) => 
     <li key={task.id}>
       <div>
-        <span>{task.title}</span>
-        <span>{task.description}</span>
-        <span>{task.assignee}</span>
-        <span>{task.status}</span>
-        {/* <Upload id={task.id}></Upload> */}
+        <span>Title: <span className="userdata">{task.title}</span></span>
+        <Description task={task}></Description>
+        <span>Status: 
+          <button className={`button status-${task.status}`} id={task.id} onClick={_toggleStatus}>{task.status}</button>
+        </span>
+        <form className="push" action={`${API}/${task.id}/images`} method="post" encType="multipart/form-data">
+              <label>
+                <span>Upload Image: </span>
+                <input name="file" type="file" />
+              </label>
+              <button>Submit</button>
+              </form>
         </div>
       </li>
     )}
@@ -44,6 +78,11 @@ function Tasks() {
     </div>
 
   )
+
+  
 }
+
+
+
 
 export default Tasks;
